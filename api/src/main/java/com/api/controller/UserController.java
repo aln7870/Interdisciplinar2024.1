@@ -26,6 +26,7 @@ public class UserController{
 
     //ResponseEntity é um metodo de retornar algo mais personalizado
     //dto vai receber o Json e passar pra objeto java userModel
+    //pqp git
     @PostMapping
     public ResponseEntity<UserModel> saveUser(@RequestBody @Valid UserRecordDto userRecordDto){
         var userModel = new UserModel();
