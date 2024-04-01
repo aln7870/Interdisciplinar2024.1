@@ -61,7 +61,7 @@ public class UserController{
     }
     //delete user
     @DeleteMapping("/{idUser}")
-    public  ResponseEntity<Object> deleteProduct(@PathVariable(value = "id")UUID idUser){
+    public  ResponseEntity<Object> deleteProduct(@PathVariable(value = "idUser")UUID idUser){
         Optional<UserModel> user0 = userRepository.findById(idUser);
         if (user0.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");

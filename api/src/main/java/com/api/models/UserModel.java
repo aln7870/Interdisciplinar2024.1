@@ -13,15 +13,48 @@ public class UserModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID idUser;
-    //nullable == not null
-
+    //nullable = false == not null
+    @Column(nullable = false, length = 100)
     private String name;
-
+    @Column(nullable = false, length = 100)
     private String email;
-
+    @Column(nullable = false, length = 50)
     private String senha;
-
+    @Column(nullable = false, length = 15)
     private String telefone;
+    @Column(nullable = false, length = 10)
+    private String dataNasc;
+    @Column(nullable = false, length = 10)
+    private String genero;
+    @Column(nullable = false, length = 15)
+    //tipo usuario
+    // muai thai = 1/ boxe = 2/ jiu jitsu = 3/ cross fit = 4
+    private String modalidade;
+
+
+    public String getModalidade() {
+        return modalidade;
+    }
+
+    public void setModalidade(String modalidade) {
+        this.modalidade = modalidade;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    public String getDataNasc() {
+        return dataNasc;
+    }
+
+    public void setDataNasc(String dataNasc) {
+        this.dataNasc = dataNasc;
+    }
 
     public String getSenha() {
         return senha;
