@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,6 +31,14 @@ public class UserController{
     @PostMapping
     public ResponseEntity<UserModel> saveUser(@RequestBody @Valid UserRecordDto userRecordDto){
         var userModel = new UserModel();
+        //conversao de string para objeto user
+        Date dataNasc = Date.valueOf(userRecordDto.dataNasc());
+        //mandando a data para o objeto user
+        userModel.setDataNasc(dataNasc);
+        //conversao de string para char
+        char status = userRecordDto.status().charAt(0);
+        //enviando char para o objeto
+        userModel.setStatus(status);
         //BeanUtil = userRecordDto e converte em userModel
         BeanUtils.copyProperties(userRecordDto, userModel);
         //body utiliza o crud para salvar os dados
