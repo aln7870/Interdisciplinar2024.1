@@ -9,18 +9,72 @@ import java.util.UUID;
 @Table(name = "instrutor")
 public class InstrutorModel implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID idInstrutor;
-    @Column(nullable = false, length = 100)
-    private String name;
-    @Column(nullable = false, length = 100)
-    private String horarioDisponivel;
-    @Column(nullable = false, length = 15)
+    @Column(name = "Cod_Instrutor")
+    private UUID codInstrutor;
+
+    @Column(name = "Nome", nullable = false, length = 100)
+    private String nome;
+
+    @Column(name = "Telefone", length = 15)
     private String telefone;
-    @Column(nullable = false, length = 1)
-    private String status;
 
+    @Column(name = "Horario_disponivel", length = 100)
+    private String horarioDisponivel;
 
+    @Column(name = "status", columnDefinition = "CHAR(1) DEFAULT 'A'")
+    private char status;
 
+    @Column(name = "FK_cod_Especialidade")
+    private int fkCodEspecialidade;
+
+    public UUID getCodInstrutor() {
+        return codInstrutor;
+    }
+
+    public void setCodInstrutor(UUID codInstrutor) {
+        this.codInstrutor = codInstrutor;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getHorarioDisponivel() {
+        return horarioDisponivel;
+    }
+
+    public void setHorarioDisponivel(String horarioDisponivel) {
+        this.horarioDisponivel = horarioDisponivel;
+    }
+
+    public char getStatus() {
+        return status;
+    }
+
+    public void setStatus(char status) {
+        this.status = status;
+    }
+
+    public int getFkCodEspecialidade() {
+        return fkCodEspecialidade;
+    }
+
+    public void setFkCodEspecialidade(int fkCodEspecialidade) {
+        this.fkCodEspecialidade = fkCodEspecialidade;
+    }
 }
