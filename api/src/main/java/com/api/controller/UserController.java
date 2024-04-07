@@ -2,7 +2,7 @@ package com.api.controller;
 
 import com.api.dtos.UserRecordDto;
 import com.api.models.UserModel;
-import com.api.repositories.Repository;
+import com.api.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 //@RequestMapping("/") é o parametro para endereçamento
 @RequestMapping("/usuarios")
@@ -21,7 +21,7 @@ import java.util.UUID;
 public class UserController{
     //acesso aos metodos
     @Autowired
-    Repository repository;
+    UserRepository userRepository;
 
     //ResponseEntity é um metodo de retornar algo mais personalizado
     //dto vai receber o Json e passar pra objeto java userModel
@@ -40,17 +40,17 @@ public class UserController{
         //BeanUtil = userRecordDto e converte em userModel
         BeanUtils.copyProperties(userRecordDto, userModel);
         //body utiliza o crud para salvar os dados
-        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(userModel));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(userModel));
     }
     //get all Users
     @GetMapping
     public ResponseEntity<List<UserModel>> getAllUsers(){
-        return ResponseEntity.status(HttpStatus.OK).body(repository.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(userRepository.findAll());
     }
     //get one User
     @GetMapping("/{idUser}")
-    public ResponseEntity<Object> getOneUser(@PathVariable(value = "idUser")UUID idUser){
-        Optional<UserModel> user0 = repository.findById(idUser);
+    public ResponseEntity<Object> getOneUser(@PathVariable(value = "idUser")Long idUser){
+        Optional<UserModel> user0 = userRepository.findById(idUser);
         if (user0.isEmpty()){
             return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
@@ -58,23 +58,23 @@ public class UserController{
     }
     //update user
     @PutMapping("/{idUser}")
-    public ResponseEntity<Object> updateUser(@PathVariable(value = "idUser") UUID idUser, @RequestBody @Valid UserRecordDto userRecordDto){
-        Optional<UserModel> user0 = repository.findById(idUser);
+    public ResponseEntity<Object> updateUser(@PathVariable(value = "idUser") Long idUser, @RequestBody @Valid UserRecordDto userRecordDto){
+        Optional<UserModel> user0 = userRepository.findById(idUser);
         if (user0.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
         var userModel = user0.get();
         BeanUtils.copyProperties(userRecordDto, userModel);
-        return ResponseEntity.status(HttpStatus.OK).body(repository.save(userModel));
+        return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(userModel));
     }
     //delete user
     @DeleteMapping("/{idUser}")
-    public  ResponseEntity<Object> deleteProduct(@PathVariable(value = "idUser")UUID idUser){
-        Optional<UserModel> user0 = repository.findById(idUser);
+    public  ResponseEntity<Object> deleteProduct(@PathVariable(value = "idUser")Long idUser){
+        Optional<UserModel> user0 = userRepository.findById(idUser);
         if (user0.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
         }
-        repository.delete(user0.get());
+        userRepository.delete(user0.get());
         return ResponseEntity.status(HttpStatus.OK).body("Product deleted.");
     }
 

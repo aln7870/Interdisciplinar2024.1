@@ -11,9 +11,9 @@ public class InstrutorModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "Cod_Instrutor")
-    private UUID codInstrutor;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Cod_Instrutor", nullable = false)
+    private Long codInstrutor;
 
     @Column(name = "Nome", nullable = false, length = 100)
     private String nome;
@@ -30,11 +30,11 @@ public class InstrutorModel implements Serializable {
     @Column(name = "FK_cod_Especialidade")
     private int fkCodEspecialidade;
 
-    public UUID getCodInstrutor() {
+    public Long getCodInstrutor() {
         return codInstrutor;
     }
 
-    public void setCodInstrutor(UUID codInstrutor) {
+    public void setCodInstrutor(Long codInstrutor) {
         this.codInstrutor = codInstrutor;
     }
 

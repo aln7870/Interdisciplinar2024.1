@@ -2,19 +2,19 @@ package com.api.models;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
+
 import java.sql.Date;
 import java.util.UUID;
 
 @Entity
 @Table(name = "usuario")
-public class UserModel implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class UserModel{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "Cod_Usuario")
-    private UUID idUser;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //updatable = false == é para quando atualizar uma entidade usuario o valor do campo 'idUser' não será alterado no banco
+    @Column(name = "Cod_Usuario", nullable = false)
+    private Long idUser;
     //nullable = false == not null
     @Column(name = "Nome", nullable = false, length = 100)
     private String name;
@@ -49,11 +49,11 @@ public class UserModel implements Serializable {
         this.dataNasc = dataNasc;
     }
 
-    public UUID getIdUser() {
+    public Long getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(UUID idUser) {
+    public void setIdUser(Long idUser) {
         this.idUser = idUser;
     }
 
