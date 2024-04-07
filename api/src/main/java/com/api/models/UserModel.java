@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 
 
 import java.sql.Date;
-import java.util.UUID;
 
 @Entity
 @Table(name = "usuario")
-public class UserModel{
+public class UserModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
