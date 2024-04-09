@@ -30,7 +30,7 @@ public class UserModel {
     private String genero;
     @Column(name = "Tip_usuario", nullable = false, length = 15)
     //tipo usuario
-    // muai thai = 1/ boxe = 2/ jiu jitsu = 3/ cross fit = 4
+    // muay thai = 1/ boxe = 2/ jiu jitsu = 3/ cross fit = 4
     private String modalidade;
     @Column(name = "Status", columnDefinition = "CHAR(1) DEFAULT 'A'")
     private char status;

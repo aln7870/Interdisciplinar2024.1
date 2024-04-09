@@ -16,7 +16,7 @@ import java.util.Optional;
 
 
 //@RequestMapping("/") é o parametro para endereçamento
-@RequestMapping("/usuarios")
+@RequestMapping("/users")
 @RestController
 public class UserController {
     //acesso aos metodos
@@ -44,8 +44,12 @@ public class UserController {
     }
     //get all Users
     @GetMapping
-    public ResponseEntity<List<UserModel>> getAllUsers(){
-        return ResponseEntity.status(HttpStatus.OK).body(userInterface.findAll());
+    public ResponseEntity<Object> getAllUsers(){
+        List<UserModel> users = userInterface.findAll();
+        if (users.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no registered users.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
     //get one User
     @GetMapping("/{idUser}")
@@ -69,13 +73,13 @@ public class UserController {
     }
     //delete user
     @DeleteMapping("/{idUser}")
-    public  ResponseEntity<Object> deleteProduct(@PathVariable(value = "idUser")Long idUser){
+    public  ResponseEntity<Object> deleteUser(@PathVariable(value = "idUser")Long idUser){
         Optional<UserModel> user0 = userInterface.findById(idUser);
         if (user0.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
         userInterface.delete(user0.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Product deleted.");
+        return ResponseEntity.status(HttpStatus.OK).body("User deleted.");
     }
 
 }

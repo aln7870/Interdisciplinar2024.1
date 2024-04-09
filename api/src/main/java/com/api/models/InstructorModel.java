@@ -2,16 +2,14 @@ package com.api.models;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
-
 @Entity
 @Table(name = "instrutor")
-public class InstrutorModel{
+public class InstructorModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Cod_Instrutor", nullable = false)
-    private Long codInstrutor;
+    private Long idInstructor;
 
     @Column(name = "Nome", nullable = false, length = 100)
     private String nome;
@@ -28,12 +26,12 @@ public class InstrutorModel{
     @Column(name = "FK_cod_Especialidade")
     private int fkCodEspecialidade;
 
-    public Long getCodInstrutor() {
-        return codInstrutor;
+    public Long getIdInstructor() {
+        return idInstructor;
     }
 
-    public void setCodInstrutor(Long codInstrutor) {
-        this.codInstrutor = codInstrutor;
+    public void setIdInstrutor(Long idInstructor) {
+        this.idInstructor = idInstructor;
     }
 
     public String getNome() {
