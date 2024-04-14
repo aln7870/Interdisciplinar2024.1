@@ -4,17 +4,17 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "endereco")
-public class Endereco {
+public class EnderecoModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Cod_Endereco")
-    private Integer codEndereco;
+    @Column(name = "Cod_Endereco", nullable = false)
+    private Long codEndereco;
 
     @Column(name = "Rua", nullable = false, length = 100)
     private String rua;
 
     @Column(name = "Numero", nullable = false)
-    private Integer numero;
+    private Long numero;
 
     @Column(name = "Complemento", length = 100)
     private String complemento;
@@ -26,19 +26,19 @@ public class Endereco {
     private String cidade;
 
     @Column(name = "Cep")
-    private Integer cep;
+    private Long cep;
 
     @Column(name = "status", length = 1, columnDefinition = "CHAR DEFAULT 'A'")
     private char status = 'A';
 
     @Column(name = "Fk_Cod_Usuario", nullable = false)
-    private Integer fkCodUsuario;
+    private Long fkCodUsuario;
 
-    public Integer getCodEndereco() {
+    public Long getCodEndereco() {
         return codEndereco;
     }
 
-    public void setCodEndereco(Integer codEndereco) {
+    public void setCodEndereco(Long codEndereco) {
         this.codEndereco = codEndereco;
     }
 
@@ -50,11 +50,11 @@ public class Endereco {
         this.rua = rua;
     }
 
-    public Integer getNumero() {
+    public Long getNumero() {
         return numero;
     }
 
-    public void setNumero(Integer numero) {
+    public void setNumero(Long numero) {
         this.numero = numero;
     }
 
@@ -82,11 +82,11 @@ public class Endereco {
         this.cidade = cidade;
     }
 
-    public Integer getCep() {
+    public Long getCep() {
         return cep;
     }
 
-    public void setCep(Integer cep) {
+    public void setCep(Long cep) {
         this.cep = cep;
     }
 
@@ -98,11 +98,11 @@ public class Endereco {
         this.status = status;
     }
 
-    public Integer getFkCodUsuario() {
+    public Long getFkCodUsuario() {
         return fkCodUsuario;
     }
 
-    public void setFkCodUsuario(Integer fkCodUsuario) {
+    public void setFkCodUsuario(Long fkCodUsuario) {
         this.fkCodUsuario = fkCodUsuario;
     }
 }

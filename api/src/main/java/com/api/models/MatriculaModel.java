@@ -27,7 +27,15 @@ public class MatriculaModel {
     private char status;
 
     @Column(name = "Cod_aluno", nullable = false)
-    private Long codAluno;
+    private Long fkidStudent;
+
+    public Long getIdStudent() {
+        return fkidStudent;
+    }
+
+    public void setIdStudent(Long idStudent) {
+        this.fkidStudent = idStudent;
+    }
 
     public Long getCodMatricula() {
         return codMatricula;
@@ -69,11 +77,4 @@ public class MatriculaModel {
         this.status = status;
     }
 
-    public Long getCodAluno() {
-        return codAluno;
-    }
-
-    public void setCodAluno(Long codAluno) {
-        this.codAluno = codAluno;
-    }
 }

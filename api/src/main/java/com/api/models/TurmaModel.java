@@ -35,10 +35,10 @@ public class TurmaModel {
     private char status;
 
     @Column(name = "fk_Cod_Especialidade")
-    private long fkEspecialidade;
+    private long fkCodEspecialidade;
 
     @Column(name = "fk_id_instrutor")
-    private long idInstrutor;
+    private long fkIdInstrutor;
 
     public Long getCodTurma() {
         return codTurma;
@@ -104,19 +104,19 @@ public class TurmaModel {
         this.status = status;
     }
 
-    public long getFkEspecialidade() {
-        return fkEspecialidade;
+    public long getFkCodEspecialidade() {
+        return fkCodEspecialidade;
     }
 
-    public void setFkEspecialidade(long fkEspecialidade) {
-        this.fkEspecialidade = fkEspecialidade;
+    public void setFkCodEspecialidade(long fkCodEspecialidade) {
+        this.fkCodEspecialidade = fkCodEspecialidade;
     }
 
-    public long getIdInstrutor() {
-        return idInstrutor;
+    public long getFkIdInstrutor() {
+        return fkIdInstrutor;
     }
 
-    public void setIdInstrutor(long idInstrutor) {
-        this.idInstrutor = idInstrutor;
+    public void setFkIdInstrutor(long fkIdInstrutor) {
+        this.fkIdInstrutor = fkIdInstrutor;
     }
 }

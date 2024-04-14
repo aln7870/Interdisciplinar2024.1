@@ -2,17 +2,16 @@ package com.api.models;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.sql.Date;
 
 @Entity
 @Table(name = "aluno")
-public class AlunoModel{
+public class StudentModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_aluno",nullable = false)
-    private Long idAluno;
+    private Long idStudent;
 
     @Column(name = "Nome", nullable = false, length = 100)
     private String nome;
@@ -41,16 +40,16 @@ public class AlunoModel{
     @Column(name = "UltimaAtualizacao", length = 100)
     private String ultimaAtualizacao;
 
-    @Column(name = "id_usuario", nullable = false)
-    private Long idUsuario;
+    @Column(name = "cod_usuario", nullable = false)
+    private Long codUsuario;
 
 
-    public Long getIdAluno() {
-        return idAluno;
+    public Long getIdStudent() {
+        return idStudent;
     }
 
-    public void setIdAluno(Long idAluno) {
-        this.idAluno = idAluno;
+    public void setIdStudent(Long idStudent) {
+        this.idStudent = idStudent;
     }
 
     public String getNome() {
@@ -125,11 +124,11 @@ public class AlunoModel{
         this.ultimaAtualizacao = ultimaAtualizacao;
     }
 
-    public Long getIdUsuario() {
-        return idUsuario;
+    public Long getCodUsuario() {
+        return codUsuario;
     }
 
-    public void setIdUsuario(Long idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setCodUsuario(Long codUsuario) {
+        this.codUsuario = codUsuario;
     }
 }

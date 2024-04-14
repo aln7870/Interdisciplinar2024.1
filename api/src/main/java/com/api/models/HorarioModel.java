@@ -22,7 +22,7 @@ public class HorarioModel {
     private Time horaTerminio;
 
     @Column(name = "id_turma", nullable = false)
-    private Long idTurma;
+    private Long fkcodTurma;
 
     public Long getIdHorario() {
         return idHorario;
@@ -56,11 +56,11 @@ public class HorarioModel {
         this.horaTerminio = horaTerminio;
     }
 
-    public Long getIdTurma() {
-        return idTurma;
+    public Long getFkcodTurma() {
+        return fkcodTurma;
     }
 
-    public void setIdTurma(Long idTurma) {
-        this.idTurma = idTurma;
+    public void setFkcodTurma(Long fkcodTurma) {
+        this.fkcodTurma = fkcodTurma;
     }
 }

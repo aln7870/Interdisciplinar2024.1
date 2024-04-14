@@ -7,11 +7,11 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "pagamento")
-public class Pagamento {
+public class PagamentoModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Cod_Pagamento")
-    private Integer codPagamento;
+    @Column(name = "Cod_Pagamento", nullable = false)
+    private Long codPagamento;
 
     @Column(name = "Tipo_Pagamento", length = 50)
     private String tipoPagamento;
@@ -29,13 +29,13 @@ public class Pagamento {
     private char status;
 
     @Column(name = "Fk_Cod_aluno", nullable = false)
-    private Integer fkCodAluno;
+    private Long fkCodAluno;
 
-    public Integer getCodPagamento() {
+    public Long getCodPagamento() {
         return codPagamento;
     }
 
-    public void setCodPagamento(Integer codPagamento) {
+    public void setCodPagamento(Long codPagamento) {
         this.codPagamento = codPagamento;
     }
 
@@ -79,11 +79,11 @@ public class Pagamento {
         this.status = status;
     }
 
-    public Integer getFkCodAluno() {
+    public Long getFkCodAluno() {
         return fkCodAluno;
     }
 
-    public void setFkCodAluno(Integer fkCodAluno) {
+    public void setFkCodAluno(Long fkCodAluno) {
         this.fkCodAluno = fkCodAluno;
     }
 }
