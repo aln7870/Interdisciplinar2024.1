@@ -1,8 +1,8 @@
 package com.api.controller;
 
-import com.api.dtos.UserRecordDto;
-import com.api.models.UserModel;
-import com.api.repositories.UserInterface;
+import com.api.dtos.UsuarioRecordDto;
+import com.api.models.UsuarioModel;
+import com.api.repositories.UsuarioInterface;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,69 +16,69 @@ import java.util.Optional;
 
 
 //@RequestMapping("/") é o parametro para endereçamento
-@RequestMapping("/users")
+@RequestMapping("/usuarios")
 @RestController
-public class UserController {
+public class UsuarioController {
     //acesso aos metodos
     @Autowired
-    UserInterface userInterface;
+    UsuarioInterface usuarioInterface;
 
     //ResponseEntity é um metodo de retornar algo mais personalizado
     //dto vai receber o Json e passar pra objeto java userModel
     //pqp git
     @PostMapping
-    public ResponseEntity<UserModel> saveUser(@RequestBody @Valid UserRecordDto userRecordDto){
-        var userModel = new UserModel();
+    public ResponseEntity<UsuarioModel> saveUser(@RequestBody @Valid UsuarioRecordDto usuarioRecordDto){
+        var userModel = new UsuarioModel();
         //conversao de string para objeto user
-        Date dataNasc = Date.valueOf(userRecordDto.dataNasc());
+        Date dataNasc = Date.valueOf(usuarioRecordDto.dataNasc());
         //mandando a data para o objeto user
         userModel.setDataNasc(dataNasc);
         //conversao de string para char
-        char status = userRecordDto.status().charAt(0);
+        char status = usuarioRecordDto.status().charAt(0);
         //enviando char para o objeto
         userModel.setStatus(status);
         //BeanUtil = userRecordDto e converte em userModel
-        BeanUtils.copyProperties(userRecordDto, userModel);
+        BeanUtils.copyProperties(usuarioRecordDto, userModel);
         //body utiliza o crud para salvar os dados
-        return ResponseEntity.status(HttpStatus.CREATED).body(userInterface.save(userModel));
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioInterface.save(userModel));
     }
     //get all Users
     @GetMapping
     public ResponseEntity<Object> getAllUsers(){
-        List<UserModel> users = userInterface.findAll();
+        List<UsuarioModel> users = usuarioInterface.findAll();
         if (users.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no registered users.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
     //get one User
-    @GetMapping("/{idUser}")
-    public ResponseEntity<Object> getOneUser(@PathVariable(value = "idUser")Long idUser){
-        Optional<UserModel> user0 = userInterface.findById(idUser);
+    @GetMapping("/{codUsuario}")
+    public ResponseEntity<Object> getOneUser(@PathVariable(value = "codUsuario")Integer codUsuario){
+        Optional<UsuarioModel> user0 = usuarioInterface.findById(codUsuario);
         if (user0.isEmpty()){
             return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(user0.get());
     }
     //update user
-    @PutMapping("/{idUser}")
-    public ResponseEntity<Object> updateUser(@PathVariable(value = "idUser") Long idUser, @RequestBody @Valid UserRecordDto userRecordDto){
-        Optional<UserModel> user0 = userInterface.findById(idUser);
+    @PutMapping("/{codUsuario}")
+    public ResponseEntity<Object> updateUser(@PathVariable(value = "codUsuario") Integer codUsuario, @RequestBody @Valid UsuarioRecordDto usuarioRecordDto){
+        Optional<UsuarioModel> user0 = usuarioInterface.findById(codUsuario);
         if (user0.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
         var userModel = user0.get();
-        BeanUtils.copyProperties(userRecordDto, userModel);
-        return ResponseEntity.status(HttpStatus.OK).body(userInterface.save(userModel));
+        BeanUtils.copyProperties(usuarioRecordDto, userModel);
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioInterface.save(userModel));
     }
     //delete user
-    @DeleteMapping("/{idUser}")
-    public  ResponseEntity<Object> deleteUser(@PathVariable(value = "idUser")Long idUser){
-        Optional<UserModel> user0 = userInterface.findById(idUser);
+    @DeleteMapping("/{codUsuario}")
+    public  ResponseEntity<Object> deleteUser(@PathVariable(value = "codUsuario")Integer codUsuario){
+        Optional<UsuarioModel> user0 = usuarioInterface.findById(codUsuario);
         if (user0.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
-        userInterface.delete(user0.get());
+        usuarioInterface.delete(user0.get());
         return ResponseEntity.status(HttpStatus.OK).body("User deleted.");
     }
 

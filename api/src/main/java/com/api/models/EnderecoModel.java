@@ -5,16 +5,17 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "endereco")
 public class EnderecoModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Cod_Endereco", nullable = false)
-    private Long codEndereco;
+    @Column(name = "Cod_Endereco")
+    private Integer codEndereco;
 
-    @Column(name = "Rua", nullable = false, length = 100)
+    @Column(name = "Rua", length = 100, nullable = false)
     private String rua;
 
     @Column(name = "Numero", nullable = false)
-    private Long numero;
+    private Integer numero;
 
     @Column(name = "Complemento", length = 100)
     private String complemento;
@@ -26,19 +27,20 @@ public class EnderecoModel {
     private String cidade;
 
     @Column(name = "Cep")
-    private Long cep;
+    private Integer cep;
 
-    @Column(name = "status", length = 1, columnDefinition = "CHAR DEFAULT 'A'")
-    private char status = 'A';
+    @Column(name = "status", columnDefinition = "CHAR(1) DEFAULT 'A'")
+    private char status;
 
-    @Column(name = "Fk_Cod_Usuario", nullable = false)
-    private Long fkCodUsuario;
+    @ManyToOne
+    @JoinColumn(name = "Cod_Usuario", referencedColumnName = "Cod_Usuario")
+    private UsuarioModel fkUsuario;
 
-    public Long getCodEndereco() {
+    public Integer getCodEndereco() {
         return codEndereco;
     }
 
-    public void setCodEndereco(Long codEndereco) {
+    public void setCodEndereco(Integer codEndereco) {
         this.codEndereco = codEndereco;
     }
 
@@ -50,11 +52,11 @@ public class EnderecoModel {
         this.rua = rua;
     }
 
-    public Long getNumero() {
+    public Integer getNumero() {
         return numero;
     }
 
-    public void setNumero(Long numero) {
+    public void setNumero(Integer numero) {
         this.numero = numero;
     }
 
@@ -82,11 +84,11 @@ public class EnderecoModel {
         this.cidade = cidade;
     }
 
-    public Long getCep() {
+    public Integer getCep() {
         return cep;
     }
 
-    public void setCep(Long cep) {
+    public void setCep(Integer cep) {
         this.cep = cep;
     }
 
@@ -98,11 +100,11 @@ public class EnderecoModel {
         this.status = status;
     }
 
-    public Long getFkCodUsuario() {
-        return fkCodUsuario;
+    public UsuarioModel getFkUsuario() {
+        return fkUsuario;
     }
 
-    public void setFkCodUsuario(Long fkCodUsuario) {
-        this.fkCodUsuario = fkCodUsuario;
+    public void setFkUsuario(UsuarioModel fkUsuario) {
+        this.fkUsuario = fkUsuario;
     }
 }

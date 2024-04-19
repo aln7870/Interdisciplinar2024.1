@@ -1,10 +1,9 @@
 package com.api.controller;
 
-import com.api.dtos.InstructorRecordDto;
-import com.api.dtos.UserRecordDto;
-import com.api.models.InstructorModel;
-import com.api.models.UserModel;
-import com.api.repositories.InstructorInterface;
+
+import com.api.dtos.InstrutorRecordDto;
+import com.api.models.InstrutorModel;
+import com.api.repositories.InstrutorInterface;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,68 +11,72 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
-@RequestMapping("/instructors")
+@RequestMapping("/instrutores")
 @RestController
 public class InstrutorController {
 
     @Autowired
-    InstructorInterface instructorInterface;
+    InstrutorInterface instrutorInterface;
 
     @PostMapping
-    public ResponseEntity<InstructorModel> saveInstructor(@RequestBody @Valid InstructorRecordDto instructorRecordDto){
-        var instructorModel = new InstructorModel();
-        //conversao de string para char
-        char status = instructorRecordDto.status().charAt(0);
-        //enviando char para o objeto
-        instructorModel.setStatus(status);
-        //BeanUtil = userRecordDto e converte em instructorModel
-        BeanUtils.copyProperties(instructorRecordDto, instructorModel);
-        //body utiliza o crud para salvar os dados
-        return ResponseEntity.status(HttpStatus.CREATED).body(instructorInterface.save(instructorModel));
+    public ResponseEntity<InstrutorModel> saveInstrutor(@RequestBody @Valid InstrutorRecordDto instrutorRecordDto){
+        var instrutorModel = new InstrutorModel();
+        //transforming string to char😎👍
+        char status = instrutorRecordDto.status().charAt(0);
+        //sending to sql
+        instrutorModel.setStatus(status);
+        //transforming String to Date sql
+        Date dataNasc = Date.valueOf(instrutorRecordDto.dataNasc());
+        //sending to sql;
+        instrutorModel.setDataNasc(dataNasc);
+        //BeanUtils get the rest of Dtos and convert in alunoModel;
+        BeanUtils.copyProperties(instrutorRecordDto, instrutorModel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(instrutorInterface.save(instrutorModel));
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAllInstructors(){
-        List<InstructorModel> instructors = instructorInterface.findAll();
-        if (instructors.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no registered instructor.");
+    public ResponseEntity<Object> getAllInstrutores(){
+        List<InstrutorModel> instrutores = instrutorInterface.findAll();
+        if (instrutores.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum instrutor registrado.");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(instructors);
+        return ResponseEntity.status(HttpStatus.OK).body(instrutores);
     }
 
-    @GetMapping("/{idInstructor}")
-    public ResponseEntity<Object> getOneInstructor(@PathVariable(value = "idInstructor")Long idInstructor){
-        Optional<InstructorModel> instructor0 = instructorInterface.findById(idInstructor);
-        if (instructor0.isEmpty()){
-            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("Instructor not found.");
+    @GetMapping("/{codIntrutor}")
+    public ResponseEntity<Object> getOneInstrutor(@PathVariable(value = "codInstrutor")Integer codInstrutor){
+        Optional<InstrutorModel> instrutor = instrutorInterface.findById(codInstrutor);
+        if (instrutor.isEmpty()){
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum instrutor encontrado.");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(instructor0.get());
+        return ResponseEntity.status(HttpStatus.OK).body(instrutor.get());
     }
 
-    @PutMapping("/{idInstructor}")
-    public ResponseEntity<Object> updateInstructor(@PathVariable(value = "idInstructor") Long idInstructor, @RequestBody @Valid InstructorRecordDto instructorRecordDto){
-        Optional<InstructorModel> instructor0 = instructorInterface.findById(idInstructor);
-        if (instructor0.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Instructor not found.");
+
+    @PutMapping("/{codInstrutor}")
+    public ResponseEntity<Object> updateInstrutor(@PathVariable(value = "codInstrutor") Integer codInstrutor, @RequestBody @Valid InstrutorRecordDto instrutorRecordDto){
+        Optional<InstrutorModel> instrutor = instrutorInterface.findById(codInstrutor);
+        if (instrutor.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Instrutor não encontrado.");
         }
-        var instructorModel = instructor0.get();
-        BeanUtils.copyProperties(instructorRecordDto, instructorModel);
-        return ResponseEntity.status(HttpStatus.OK).body(instructorInterface.save(instructorModel));
+        var instrutorModel = instrutor.get();
+        BeanUtils.copyProperties(instrutorRecordDto, instrutorModel);
+        return ResponseEntity.status(HttpStatus.OK).body(instrutorInterface.save(instrutorModel));
     }
 
-    @DeleteMapping("/{idInstructor}")
-    public  ResponseEntity<Object> deleteInstructor(@PathVariable(value = "idInstructor")Long idInstructor){
-        Optional<InstructorModel> instructor0 = instructorInterface.findById(idInstructor);
-        if (instructor0.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Instructor not found.");
+    @DeleteMapping("/{codInstrutor}")
+    public  ResponseEntity<Object> deleteInstrutor(@PathVariable(value = "codInstrutor")Integer codInstrutor){
+        Optional<InstrutorModel> instrutor = instrutorInterface.findById(codInstrutor);
+        if (instrutor.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum instrutor encontrado.");
         }
-        instructorInterface.delete(instructor0.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Instructor deleted.");
+        instrutorInterface.delete(instrutor.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Instrutor deletado.");
     }
-
 
 
 }

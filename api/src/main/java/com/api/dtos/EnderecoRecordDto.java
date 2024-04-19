@@ -1,5 +1,7 @@
 package com.api.dtos;
 
-public record EnderecoRecordDto(String rua, long numero, String complemento,
-String bairro, String cidade, long cep,String status) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record EnderecoRecordDto(@NotBlank String rua, @NotNull Integer numero, String complemento, String bairro, String cidade, Integer cep, String status) {
 }

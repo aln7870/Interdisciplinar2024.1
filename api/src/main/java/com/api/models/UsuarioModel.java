@@ -7,13 +7,13 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "usuario")
-public class UserModel {
+public class UsuarioModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     //updatable = false == é para quando atualizar uma entidade usuario o valor do campo 'idUser' não será alterado no banco
     @Column(name = "Cod_Usuario", nullable = false)
-    private Long idUser;
+    private Integer idUser;
     //nullable = false == not null
     @Column(name = "Nome", nullable = false, length = 100)
     private String name;
@@ -28,17 +28,33 @@ public class UserModel {
     private Date dataNasc;
     @Column(name = "Genero", nullable = false, length = 10)
     private String genero;
-    @Column(name = "Tip_usuario", nullable = false, length = 15)
-    //tipo usuario
-    // muay thai = 1/ boxe = 2/ jiu jitsu = 3/ cross fit = 4
-    private String modalidade;
+
     @Column(name = "Status", columnDefinition = "CHAR(1) DEFAULT 'A'")
     private char status;
-    @Column(name = "Fk_Cod_matricula")
-    private int fkCodMatricula;
-    @Column(name = "Fk_Cod_Instrutor")
-    private int fkCodInstrutor;
 
+    @OneToOne
+    @JoinColumn(name = "Cod_Aluno", referencedColumnName = "Cod_Aluno")
+    private AlunoModel fkAluno;
+
+    @OneToOne
+    @JoinColumn(name = "Cod_Instrutor", referencedColumnName = "Cod_Instrutor")
+    private InstrutorModel fkInstrutor;
+
+    public AlunoModel getFkAluno() {
+        return fkAluno;
+    }
+
+    public void setFkAluno(AlunoModel fkAluno) {
+        this.fkAluno = fkAluno;
+    }
+
+    public InstrutorModel getFkInstrutor() {
+        return fkInstrutor;
+    }
+
+    public void setFkInstrutor(InstrutorModel fkInstrutor) {
+        this.fkInstrutor = fkInstrutor;
+    }
 
     public Date getDataNasc() {
         return dataNasc;
@@ -48,11 +64,11 @@ public class UserModel {
         this.dataNasc = dataNasc;
     }
 
-    public Long getIdUser() {
+    public Integer getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Long idUser) {
+    public void setIdUser(Integer idUser) {
         this.idUser = idUser;
     }
 
@@ -96,14 +112,6 @@ public class UserModel {
         this.genero = genero;
     }
 
-    public String getModalidade() {
-        return modalidade;
-    }
-
-    public void setModalidade(String modalidade) {
-        this.modalidade = modalidade;
-    }
-
     public char getStatus() {
         return status;
     }
@@ -112,19 +120,5 @@ public class UserModel {
         this.status = status;
     }
 
-    public int getFkCodMatricula() {
-        return fkCodMatricula;
-    }
 
-    public void setFkCodMatricula(int fkCodMatricula) {
-        this.fkCodMatricula = fkCodMatricula;
-    }
-
-    public int getFkCodInstrutor() {
-        return fkCodInstrutor;
-    }
-
-    public void setFkCodInstrutor(int fkCodInstrutor) {
-        this.fkCodInstrutor = fkCodInstrutor;
-    }
 }
