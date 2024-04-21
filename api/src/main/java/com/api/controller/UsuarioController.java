@@ -1,15 +1,15 @@
 package com.api.controller;
 
+import com.api.dtos.LoginRequestDto;
 import com.api.dtos.UsuarioRecordDto;
 import com.api.models.UsuarioModel;
-import com.api.repositories.UsuarioInterface;
+import com.api.repositories.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
@@ -17,11 +17,18 @@ import java.util.Optional;
 
 //@RequestMapping("/") é o parametro para endereçamento
 @RequestMapping("/usuarios")
+@CrossOrigin(origins = "*")
 @RestController
 public class UsuarioController {
     //acesso aos metodos
-    @Autowired
-    UsuarioInterface usuarioInterface;
+
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UsuarioController(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     //ResponseEntity é um metodo de retornar algo mais personalizado
     //dto vai receber o Json e passar pra objeto java userModel
@@ -39,13 +46,27 @@ public class UsuarioController {
         userModel.setStatus(status);
         //BeanUtil = userRecordDto e converte em userModel
         BeanUtils.copyProperties(usuarioRecordDto, userModel);
+        userModel.setSenha(passwordEncoder.encode(usuarioRecordDto.senha()));
         //body utiliza o crud para salvar os dados
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioInterface.save(userModel));
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(userModel));
     }
+
+    @PostMapping("/login")
+     public ResponseEntity<String> loginUsuario(@RequestBody @Valid LoginRequestDto loginRequestDto) {
+            Optional<UsuarioModel> usuariologin = usuarioRepository.findByNome(loginRequestDto.nome());
+            if (usuariologin.isEmpty()) {
+             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado.");
+            }
+            if (!passwordEncoder.matches(loginRequestDto.senha(), usuariologin.get().getSenha())) {
+             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Login ou senha errado.");
+            }
+            return ResponseEntity.ok("Login realizado.");
+    }
+
     //get all Users
     @GetMapping
     public ResponseEntity<Object> getAllUsers(){
-        List<UsuarioModel> users = usuarioInterface.findAll();
+        List<UsuarioModel> users = usuarioRepository.findAll();
         if (users.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no registered users.");
         }
@@ -54,7 +75,7 @@ public class UsuarioController {
     //get one User
     @GetMapping("/{codUsuario}")
     public ResponseEntity<Object> getOneUser(@PathVariable(value = "codUsuario")Integer codUsuario){
-        Optional<UsuarioModel> user0 = usuarioInterface.findById(codUsuario);
+        Optional<UsuarioModel> user0 = usuarioRepository.findById(codUsuario);
         if (user0.isEmpty()){
             return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
@@ -63,22 +84,22 @@ public class UsuarioController {
     //update user
     @PutMapping("/{codUsuario}")
     public ResponseEntity<Object> updateUser(@PathVariable(value = "codUsuario") Integer codUsuario, @RequestBody @Valid UsuarioRecordDto usuarioRecordDto){
-        Optional<UsuarioModel> user0 = usuarioInterface.findById(codUsuario);
+        Optional<UsuarioModel> user0 = usuarioRepository.findById(codUsuario);
         if (user0.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
         var userModel = user0.get();
         BeanUtils.copyProperties(usuarioRecordDto, userModel);
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioInterface.save(userModel));
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioRepository.save(userModel));
     }
     //delete user
     @DeleteMapping("/{codUsuario}")
     public  ResponseEntity<Object> deleteUser(@PathVariable(value = "codUsuario")Integer codUsuario){
-        Optional<UsuarioModel> user0 = usuarioInterface.findById(codUsuario);
+        Optional<UsuarioModel> user0 = usuarioRepository.findById(codUsuario);
         if (user0.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
-        usuarioInterface.delete(user0.get());
+        usuarioRepository.delete(user0.get());
         return ResponseEntity.status(HttpStatus.OK).body("User deleted.");
     }
 

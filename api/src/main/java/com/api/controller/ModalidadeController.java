@@ -1,28 +1,27 @@
 package com.api.controller;
 
-import com.api.dtos.AlunoRecordDto;
 import com.api.dtos.ModalidadeRecordDto;
-import com.api.models.AlunoModel;
 import com.api.models.ModalidadeModel;
-import com.api.repositories.AlunoInterface;
-import com.api.repositories.ModalidadeInterface;
+import com.api.repositories.ModalidadeRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
 @RequestMapping("/modalidades")
+@CrossOrigin(origins = "*")
 @RestController
 public class ModalidadeController {
 
-    @Autowired
-    ModalidadeInterface modalidadeInterface;
+    private final ModalidadeRepository modalidadeRepository;
+
+    public ModalidadeController(ModalidadeRepository modalidadeRepository) {
+        this.modalidadeRepository = modalidadeRepository;
+    }
 
     @PostMapping
     public ResponseEntity<ModalidadeModel> saveModalidade(@RequestBody @Valid ModalidadeRecordDto modalidadeRecordDto){
@@ -33,12 +32,12 @@ public class ModalidadeController {
         modalidadeModel.setStatus(status);
         //BeanUtils get the rest of Dtos and convert in alunoModel;
         BeanUtils.copyProperties(modalidadeRecordDto, modalidadeModel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(modalidadeInterface.save(modalidadeModel));
+        return ResponseEntity.status(HttpStatus.CREATED).body(modalidadeRepository.save(modalidadeModel));
     }
 
     @GetMapping
     public ResponseEntity<Object> getAllModalidades(){
-        List<ModalidadeModel> modalidade = modalidadeInterface.findAll();
+        List<ModalidadeModel> modalidade = modalidadeRepository.findAll();
         if (modalidade.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma modalidade registrada.");
         }
@@ -47,7 +46,7 @@ public class ModalidadeController {
 
     @GetMapping("/{codModalidade}")
     public ResponseEntity<Object> getOneModalidade(@PathVariable(value = "codModalidade")Integer codModalidade){
-        Optional<ModalidadeModel> modalidade = modalidadeInterface.findById(codModalidade);
+        Optional<ModalidadeModel> modalidade = modalidadeRepository.findById(codModalidade);
         if (modalidade.isEmpty()){
             return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma modalidade encontrada.");
         }
@@ -57,22 +56,22 @@ public class ModalidadeController {
 
     @PutMapping("/{codModalidade}")
     public ResponseEntity<Object> updateModalidade(@PathVariable(value = "codModalidade") Integer codModalidade, @RequestBody @Valid ModalidadeRecordDto modalidadeRecordDto){
-        Optional<ModalidadeModel> modalidade = modalidadeInterface.findById(codModalidade);
+        Optional<ModalidadeModel> modalidade = modalidadeRepository.findById(codModalidade);
         if (modalidade.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found.");
         }
         var modalidadeModel = modalidade.get();
         BeanUtils.copyProperties(modalidade, modalidadeModel);
-        return ResponseEntity.status(HttpStatus.OK).body(modalidadeInterface.save(modalidadeModel));
+        return ResponseEntity.status(HttpStatus.OK).body(modalidadeRepository.save(modalidadeModel));
     }
 
     @DeleteMapping("/{codModalidade}")
     public  ResponseEntity<Object> deleteModalidade(@PathVariable(value = "codModalidade")Integer codModalidade){
-        Optional<ModalidadeModel> modalidade = modalidadeInterface.findById(codModalidade);
+        Optional<ModalidadeModel> modalidade = modalidadeRepository.findById(codModalidade);
         if (modalidade.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma modalidade encontrada.");
         }
-        modalidadeInterface.delete(modalidade.get());
+        modalidadeRepository.delete(modalidade.get());
         return ResponseEntity.status(HttpStatus.OK).body("Modalidade deletada.");
     }
 

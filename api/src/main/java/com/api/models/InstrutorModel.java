@@ -25,9 +25,6 @@ public class InstrutorModel {
     @Column(name = "Status", columnDefinition = "CHAR(1) DEFAULT 'A'")
     private char status;
 
-    @OneToOne
-    @JoinColumn(name = "Cod_Modalidade", referencedColumnName = "Cod_Modalidade")
-    private ModalidadeModel fkModalidade;
 
     public Integer getCodInstrutor() {
         return codInstrutor;
@@ -69,11 +66,4 @@ public class InstrutorModel {
         this.status = status;
     }
 
-    public ModalidadeModel getFkModalidade() {
-        return fkModalidade;
-    }
-
-    public void setFkModalidade(ModalidadeModel fkModalidade) {
-        this.fkModalidade = fkModalidade;
-    }
 }

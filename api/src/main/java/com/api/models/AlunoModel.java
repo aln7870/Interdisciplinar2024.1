@@ -1,5 +1,6 @@
 package com.api.models;
 
+
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -22,19 +23,16 @@ public class AlunoModel {
     @Column(name = "Data_De_Nasc", nullable = false)
     private Date dataDeNascimento;
 
-
-    @Column(name = "status", columnDefinition = "CHAR(1) DEFAULT 'A'")
+    @Column(name = "status",columnDefinition = "CHAR(1) DEFAULT 'A'")
     private char status;
-    @OneToOne
-    @JoinColumn(name = "Cod_Modalidade", referencedColumnName = "Cod_Modalidade")
-    private ModalidadeModel fkModalidade;
 
-    public ModalidadeModel getFkModalidade() {
-        return fkModalidade;
+
+    public char getStatus() {
+        return status;
     }
 
-    public void setFkModalidade(ModalidadeModel fkModalidade) {
-        this.fkModalidade = fkModalidade;
+    public void setStatus(char status) {
+        this.status = status;
     }
 
     public String getSobrenome() {
@@ -67,15 +65,6 @@ public class AlunoModel {
 
     public void setDataDeNascimento(Date dataDeNascimento) {
         this.dataDeNascimento = dataDeNascimento;
-    }
-
-
-    public char getStatus() {
-        return status;
-    }
-
-    public void setStatus(char status) {
-        this.status = status;
     }
 
 

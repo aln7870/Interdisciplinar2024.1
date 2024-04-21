@@ -16,10 +16,10 @@ public class UsuarioModel {
     private Integer idUser;
     //nullable = false == not null
     @Column(name = "Nome", nullable = false, length = 100)
-    private String name;
+    private String nome;
     @Column(name = "Email", nullable = false, length = 100)
     private String email;
-    @Column(name = "Senha", nullable = false, length = 50)
+    @Column(name = "Senha", nullable = false, length = 100)
     private String senha;
     @Column(name = "Telefone", nullable = false, length = 15)
     private String telefone;
@@ -39,6 +39,11 @@ public class UsuarioModel {
     @OneToOne
     @JoinColumn(name = "Cod_Instrutor", referencedColumnName = "Cod_Instrutor")
     private InstrutorModel fkInstrutor;
+
+    @OneToOne
+    @JoinColumn(name = "Cod_Modalidade", referencedColumnName = "Cod_Modalidade")
+    private ModalidadeModel fkModalidade;
+
 
     public AlunoModel getFkAluno() {
         return fkAluno;
@@ -72,12 +77,12 @@ public class UsuarioModel {
         this.idUser = idUser;
     }
 
-    public String getName() {
-        return name;
+    public String getNome() {
+        return nome;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getEmail() {
@@ -88,9 +93,7 @@ public class UsuarioModel {
         this.email = email;
     }
 
-    public String getSenha() {
-        return senha;
-    }
+    public String getSenha() { return senha; }
 
     public void setSenha(String senha) {
         this.senha = senha;
