@@ -17,33 +17,45 @@ public class UsuarioModel {
     //nullable = false == not null
     @Column(name = "Nome", nullable = false, length = 100)
     private String nome;
+
     @Column(name = "Email", nullable = false, length = 100)
     private String email;
+
     @Column(name = "Senha", nullable = false, length = 100)
     private String senha;
+
     @Column(name = "Telefone", nullable = false, length = 15)
     private String telefone;
+
     @Column(name = "Data_De_Nasc", nullable = false)
     //date recebe tipo "yyyy-MM-dd"
     private Date dataNasc;
+
     @Column(name = "Genero", nullable = false, length = 10)
     private String genero;
 
     @Column(name = "Status", columnDefinition = "CHAR(1) DEFAULT 'A'")
     private char status;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Cod_Aluno", referencedColumnName = "Cod_Aluno")
     private AlunoModel fkAluno;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Cod_Instrutor", referencedColumnName = "Cod_Instrutor")
     private InstrutorModel fkInstrutor;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Cod_Modalidade", referencedColumnName = "Cod_Modalidade")
     private ModalidadeModel fkModalidade;
 
+    public ModalidadeModel getFkModalidade() {
+        return fkModalidade;
+    }
+
+    public void setFkModalidade(ModalidadeModel fkModalidade) {
+        this.fkModalidade = fkModalidade;
+    }
 
     public AlunoModel getFkAluno() {
         return fkAluno;

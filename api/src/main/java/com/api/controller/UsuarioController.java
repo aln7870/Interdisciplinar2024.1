@@ -2,7 +2,12 @@ package com.api.controller;
 
 import com.api.dtos.LoginRequestDto;
 import com.api.dtos.UsuarioRecordDto;
+import com.api.models.AlunoModel;
+import com.api.models.InstrutorModel;
 import com.api.models.UsuarioModel;
+import com.api.repositories.AlunoRepository;
+import com.api.repositories.InstrutorRepository;
+import com.api.repositories.ModalidadeRepository;
 import com.api.repositories.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -10,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
@@ -21,11 +28,16 @@ import java.util.Optional;
 @RestController
 public class UsuarioController {
     //acesso aos metodos
-
+    private final AlunoRepository alunoRepository;
+    private final InstrutorRepository instrutorRepository;
+    private final ModalidadeRepository modalidadeRepository;
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UsuarioController(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    public UsuarioController(AlunoRepository alunoRepository, InstrutorRepository instrutorRepository, ModalidadeRepository modalidadeRepository, UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+        this.alunoRepository = alunoRepository;
+        this.instrutorRepository = instrutorRepository;
+        this.modalidadeRepository = modalidadeRepository;
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -36,10 +48,17 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<UsuarioModel> saveUser(@RequestBody @Valid UsuarioRecordDto usuarioRecordDto){
         var userModel = new UsuarioModel();
-        //conversao de string para objeto user
-        Date dataNasc = Date.valueOf(usuarioRecordDto.dataNasc());
-        //mandando a data para o objeto user
-        userModel.setDataNasc(dataNasc);
+        AlunoModel aluno = null;
+        InstrutorModel instrutor = null;
+        //PARA CRIAR USUARIO PRECISA QUE JA TENHA CRIADO ALUNO E MODALIDADE COM A MESMA CHAVE PRIMARIA🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬
+        //verificando se a chave estrangeira tem algum dado na tabela principal para linkar ou se esta vazio
+        if (usuarioRecordDto.fkAluno() != null){
+            aluno = alunoRepository.findById(usuarioRecordDto.fkAluno()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID aluno nao encontrado"));
+        }
+        if (usuarioRecordDto.fkInstrutor() != null){
+            instrutor = instrutorRepository.findById(usuarioRecordDto.fkInstrutor()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"ID instrutor nao encontrado"));
+        }
+        var modalidade = modalidadeRepository.findById(usuarioRecordDto.fkModalidade()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"id modalidade nao encontrado"));
         //conversao de string para char
         char status = usuarioRecordDto.status().charAt(0);
         //enviando char para o objeto
@@ -47,6 +66,13 @@ public class UsuarioController {
         //BeanUtil = userRecordDto e converte em userModel
         BeanUtils.copyProperties(usuarioRecordDto, userModel);
         userModel.setSenha(passwordEncoder.encode(usuarioRecordDto.senha()));
+        if (usuarioRecordDto.fkAluno() != null){
+            userModel.setFkAluno(aluno);
+        }
+        if (usuarioRecordDto.fkInstrutor() != null){
+            userModel.setFkInstrutor(instrutor);
+        }
+        userModel.setFkModalidade(modalidade);
         //body utiliza o crud para salvar os dados
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(userModel));
     }
@@ -72,6 +98,7 @@ public class UsuarioController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
+
     //get one User
     @GetMapping("/{codUsuario}")
     public ResponseEntity<Object> getOneUser(@PathVariable(value = "codUsuario")Integer codUsuario){
@@ -81,6 +108,7 @@ public class UsuarioController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(user0.get());
     }
+
     //update user
     @PutMapping("/{codUsuario}")
     public ResponseEntity<Object> updateUser(@PathVariable(value = "codUsuario") Integer codUsuario, @RequestBody @Valid UsuarioRecordDto usuarioRecordDto){
@@ -92,6 +120,7 @@ public class UsuarioController {
         BeanUtils.copyProperties(usuarioRecordDto, userModel);
         return ResponseEntity.status(HttpStatus.OK).body(usuarioRepository.save(userModel));
     }
+
     //delete user
     @DeleteMapping("/{codUsuario}")
     public  ResponseEntity<Object> deleteUser(@PathVariable(value = "codUsuario")Integer codUsuario){

@@ -32,10 +32,6 @@ public class InstrutorController {
         char status = instrutorRecordDto.status().charAt(0);
         //sending to sql
         instrutorModel.setStatus(status);
-        //transforming String to Date sql
-        Date dataNasc = Date.valueOf(instrutorRecordDto.dataNasc());
-        //sending to sql;
-        instrutorModel.setDataNasc(dataNasc);
         //BeanUtils get the rest of Dtos and convert in alunoModel;
         BeanUtils.copyProperties(instrutorRecordDto, instrutorModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(instrutorRepository.save(instrutorModel));
