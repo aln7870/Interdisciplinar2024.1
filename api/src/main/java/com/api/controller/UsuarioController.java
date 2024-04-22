@@ -28,16 +28,11 @@ import java.util.Optional;
 @RestController
 public class UsuarioController {
     //acesso aos metodos
-    private final AlunoRepository alunoRepository;
-    private final InstrutorRepository instrutorRepository;
-    private final ModalidadeRepository modalidadeRepository;
+
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UsuarioController(AlunoRepository alunoRepository, InstrutorRepository instrutorRepository, ModalidadeRepository modalidadeRepository, UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
-        this.alunoRepository = alunoRepository;
-        this.instrutorRepository = instrutorRepository;
-        this.modalidadeRepository = modalidadeRepository;
+    public UsuarioController(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -76,7 +71,7 @@ public class UsuarioController {
     public ResponseEntity<Object> getAllUsers(){
         List<UsuarioModel> users = usuarioRepository.findAll();
         if (users.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no registered users.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum usuario registrado.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
@@ -96,7 +91,7 @@ public class UsuarioController {
     public ResponseEntity<Object> updateUser(@PathVariable(value = "codUsuario") Integer codUsuario, @RequestBody @Valid UsuarioRecordDto usuarioRecordDto){
         Optional<UsuarioModel> user0 = usuarioRepository.findById(codUsuario);
         if (user0.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado.");
         }
         var userModel = user0.get();
         BeanUtils.copyProperties(usuarioRecordDto, userModel);
@@ -108,10 +103,10 @@ public class UsuarioController {
     public  ResponseEntity<Object> deleteUser(@PathVariable(value = "codUsuario")Integer codUsuario){
         Optional<UsuarioModel> user0 = usuarioRepository.findById(codUsuario);
         if (user0.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado.");
         }
         usuarioRepository.delete(user0.get());
-        return ResponseEntity.status(HttpStatus.OK).body("User deleted.");
+        return ResponseEntity.status(HttpStatus.OK).body("Usuario deletado.");
     }
 
 }

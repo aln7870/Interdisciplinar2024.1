@@ -1,8 +1,6 @@
 package com.api.models;
 
 import jakarta.persistence.*;
-
-
 import java.sql.Date;
 
 @Entity
