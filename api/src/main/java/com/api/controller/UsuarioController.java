@@ -48,17 +48,6 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<UsuarioModel> saveUser(@RequestBody @Valid UsuarioRecordDto usuarioRecordDto){
         var userModel = new UsuarioModel();
-        AlunoModel aluno = null;
-        InstrutorModel instrutor = null;
-        //PARA CRIAR USUARIO PRECISA QUE JA TENHA CRIADO ALUNO E MODALIDADE COM A MESMA CHAVE PRIMARIA🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬🤬
-        //verificando se a chave estrangeira tem algum dado na tabela principal para linkar ou se esta vazio
-        if (usuarioRecordDto.fkAluno() != null){
-            aluno = alunoRepository.findById(usuarioRecordDto.fkAluno()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID aluno nao encontrado"));
-        }
-        if (usuarioRecordDto.fkInstrutor() != null){
-            instrutor = instrutorRepository.findById(usuarioRecordDto.fkInstrutor()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"ID instrutor nao encontrado"));
-        }
-        var modalidade = modalidadeRepository.findById(usuarioRecordDto.fkModalidade()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"id modalidade nao encontrado"));
         //conversao de string para char
         char status = usuarioRecordDto.status().charAt(0);
         //enviando char para o objeto
@@ -66,13 +55,6 @@ public class UsuarioController {
         //BeanUtil = userRecordDto e converte em userModel
         BeanUtils.copyProperties(usuarioRecordDto, userModel);
         userModel.setSenha(passwordEncoder.encode(usuarioRecordDto.senha()));
-        if (usuarioRecordDto.fkAluno() != null){
-            userModel.setFkAluno(aluno);
-        }
-        if (usuarioRecordDto.fkInstrutor() != null){
-            userModel.setFkInstrutor(instrutor);
-        }
-        userModel.setFkModalidade(modalidade);
         //body utiliza o crud para salvar os dados
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(userModel));
     }

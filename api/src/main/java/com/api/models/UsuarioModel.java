@@ -37,15 +37,15 @@ public class UsuarioModel {
     @Column(name = "Status", columnDefinition = "CHAR(1) DEFAULT 'A'")
     private char status;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "Cod_Aluno", referencedColumnName = "Cod_Aluno")
     private AlunoModel fkAluno;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "Cod_Instrutor", referencedColumnName = "Cod_Instrutor")
     private InstrutorModel fkInstrutor;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "Cod_Modalidade", referencedColumnName = "Cod_Modalidade")
     private ModalidadeModel fkModalidade;
 
