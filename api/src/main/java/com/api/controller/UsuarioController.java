@@ -87,7 +87,7 @@ public class UsuarioController {
     }
 
     //update user
-    @PutMapping("/{codUsuario}")
+    @PutMapping("/codUsuario")
     public ResponseEntity<Object> updateUser(@PathVariable(value = "codUsuario") Integer codUsuario, @RequestBody @Valid UsuarioRecordDto usuarioRecordDto){
         Optional<UsuarioModel> user0 = usuarioRepository.findById(codUsuario);
         if (user0.isEmpty()){

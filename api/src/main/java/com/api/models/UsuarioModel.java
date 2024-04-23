@@ -47,6 +47,8 @@ public class UsuarioModel {
     @JoinColumn(name = "Cod_Modalidade", referencedColumnName = "Cod_Modalidade")
     private ModalidadeModel fkModalidade;
 
+
+
     public ModalidadeModel getFkModalidade() {
         return fkModalidade;
     }

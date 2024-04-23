@@ -26,7 +26,6 @@ public class AlunoModel {
     @Column(name = "status",columnDefinition = "CHAR(1) DEFAULT 'A'")
     private char status;
 
-
     public char getStatus() {
         return status;
     }
